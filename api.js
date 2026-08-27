@@ -13,7 +13,7 @@ const server = http.createServer((requisicao, resposta) => {
     if (requisiscao.method == 'get' && requisicao.url == '/tarefas') {
         resposta.statusCode = 200;
         resposta.end(JSON.stringify(tarefas));
-    } else if (requisicao.method == 'POST' && requisicao.url == '/tarefas') {
+    } else if (requisicao.method == 'POST' && requisicao.url == '/tarefa') {
         let body = '';
 
         requisicao.on('data', (chunk) => {
@@ -40,12 +40,12 @@ const server = http.createServer((requisicao, resposta) => {
                 resposta.end(JSON.stringify(tarefaCriada));
             } catch (error) {
                 resposta.statusCode = 400;
-                resposta.end(JSON.stringify(error: 'Formato JSON inválido!'));
+                resposta.end(JSON.stringify({error:'Formato JSON inválido!'}));
             }
         });
     } else {
         resposta.statusCode = 404;
-        resposta.end(JSON.stringify(error: 'Rota não encontrada.'));
+        resposta.end(JSON.stringify({error:'Rota não encontrada.'}));
     }
 });
 
