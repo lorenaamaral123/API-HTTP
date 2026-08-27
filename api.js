@@ -1,5 +1,7 @@
 import http from 'node:http';
 
+import { url } from 'node:url';
+
 const porta = 3000;
 
 const tarefas = [
@@ -9,6 +11,8 @@ const tarefas = [
 
 const server = http.createServer((requisicao, resposta) => {
     resposta.setHeader('content-type', 'application/json');
+
+    const urlObl = new URL(requisicao.url, `http://${requisicao.headers.setHeader.host}`);
 
     if (requisiscao.method == 'get' && requisicao.url == '/tarefas') {
         resposta.statusCode = 200;
@@ -31,7 +35,7 @@ const server = http.createServer((requisicao, resposta) => {
 
                 const tarefaCriada = {
                     id: tarefas.length + 1,
-                    nome: novaTarefa.titulo
+                    nome: novaTarefa.nome
                 };
 
                 tarefas.push(tarefaCriada);
@@ -40,12 +44,15 @@ const server = http.createServer((requisicao, resposta) => {
                 resposta.end(JSON.stringify(tarefaCriada));
             } catch (error) {
                 resposta.statusCode = 400;
-                resposta.end(JSON.stringify({error:'Formato JSON inválido!'}));
+                resposta.end(JSON.stringify({ error: 'Formato JSON inválido!' }));
             }
         });
-    } else {
+    } else if (requisicao.method == "GET" && urlObj.pathname == "/tarefas/busca") {
+        const nome = urlObj.searchParams.get('nome');
+    }
+    else {
         resposta.statusCode = 404;
-        resposta.end(JSON.stringify({error:'Rota não encontrada.'}));
+        resposta.end(JSON.stringify({ error: 'Rota não encontrada.' }));
     }
 });
 
